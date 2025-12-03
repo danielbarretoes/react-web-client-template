@@ -7,10 +7,23 @@ export interface NavItem {
   icon: LucideIcon;
 }
 
-const navItems: NavItem[] = [
-  { path: "/", label: "Home", icon: Home },
-  { path: "/users", label: "Users", icon: Users },
-  { path: "/settings", label: "Settings", icon: Settings },
+export interface NavGroup {
+  title?: string;
+  items: NavItem[];
+}
+
+const navGroups: NavGroup[] = [
+  {
+    title: "Main",
+    items: [
+      { path: "/", label: "Home", icon: Home },
+      { path: "/users", label: "Users", icon: Users },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [{ path: "/settings", label: "Settings", icon: Settings }],
+  },
 ];
 
-export default navItems;
+export default navGroups;

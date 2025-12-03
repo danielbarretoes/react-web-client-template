@@ -1,2 +1,2 @@
-export { default as CollapsibleButton } from "./button";
+export { default as CollapsibleButton } from "./collapsible-button";
 

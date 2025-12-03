@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "./sidebar-context";
+import { useSidebar } from "./use-sidebar";
 
 interface SidebarNavItemProps {
   path: string;
@@ -25,11 +25,11 @@ function SidebarNavItem({ path, label, icon: Icon }: SidebarNavItemProps) {
             : "text-muted-foreground [&_svg]:text-muted-foreground",
           isCollapsed
             ? "justify-center size-10 p-0 gap-0 mx-auto"
-            : "justify-start h-10 px-4 py-2 gap-3 w-full"
+            : "justify-start h-10 px-3 py-2 gap-3 w-full"
         )
       }
     >
-      <Icon className="size-5 shrink-0 transition-all duration-300" />
+      <Icon className="size-6 shrink-0 transition-all duration-300" />
       <span
         className={cn(
           "transition-all duration-300 ease-in-out whitespace-nowrap font-medium",

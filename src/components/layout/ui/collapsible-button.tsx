@@ -33,7 +33,7 @@ function CollapsibleButton({
       )}
       {...props}
     >
-      {Icon && <Icon className="size-4 shrink-0" />}
+      {Icon && <Icon className="size-6 shrink-0" />}
       {!collapsed && label && (
         <span className="whitespace-nowrap">{label}</span>
       )}
