@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "./use-sidebar";
+import { useSidebar } from "./sidebar-context";
 import SidebarNavItem from "./sidebar-nav-item";
 import type { NavGroup } from "@/components/router/nav";
 
@@ -43,7 +43,7 @@ function SidebarNavGroup({
         <button
           onClick={toggleGroup}
           className={cn(
-            "w-full flex items-center justify-between px-4 py-2 rounded-lg",
+            "w-full flex items-center justify-between px-4 py-2.5 rounded-lg",
             "text-xs font-semibold text-muted-foreground uppercase tracking-wider",
             "hover:bg-accent/50 hover:text-accent-foreground",
             "transition-all duration-200 ease-in-out"
@@ -59,10 +59,10 @@ function SidebarNavGroup({
       )}
       <div
         className={cn(
-          "space-y-1 transition-all duration-300 ease-in-out overflow-hidden",
+          "space-y-1.5 transition-all duration-300 ease-in-out overflow-hidden",
           isGroupCollapsed && !isCollapsed
-            ? "max-h-0 opacity-0 -mt-1"
-            : "max-h-[500px] opacity-100"
+            ? "max-h-0 opacity-0 -mt-2"
+            : "max-h-[500px] opacity-100 pt-0.5"
         )}
       >
         {group.items.map((item) => (

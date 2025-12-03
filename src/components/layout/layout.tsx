@@ -1,21 +1,49 @@
 import Sidebar from "./sidebar/sidebar";
 import { SidebarProvider } from "./sidebar/sidebar-context";
-import Content from "./content/content";
 import backgroundImage from "@/assets/background-image-light.jpg";
+import { Outlet } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
-function Layout() {
+interface LayoutProps {
+  backgroundImage?: string;
+  backgroundColor?: string;
+}
+
+function Layout({
+  backgroundImage: customBackgroundImage,
+  backgroundColor = undefined, //"primary",
+}: LayoutProps = {}) {
+  const defaultBackgroundImage = customBackgroundImage || backgroundImage;
+  const hasBackgroundImage = defaultBackgroundImage && !backgroundColor;
+
   return (
     <SidebarProvider>
-      <div className="relative flex h-screen w-screen">
-        {/* Background image */}
+      <div className="relative flex h-screen w-screen overflow-hidden">
+        {/* Background */}
         <div
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat bg-fixed -z-10"
+          className={cn(
+            "fixed inset-0 -z-10",
+            hasBackgroundImage && "bg-cover bg-center bg-no-repeat bg-fixed"
+          )}
           style={{
-            backgroundImage: `url(${backgroundImage})`,
+            ...(hasBackgroundImage && {
+              backgroundImage: `url(${defaultBackgroundImage})`,
+            }),
+            ...(backgroundColor && {
+              backgroundColor: backgroundColor,
+            }),
           }}
         />
-        <Sidebar />
-        <Content />
+
+        <div className="flex flex-1 md:p-2 p-0 md:gap-2 gap-0">
+          {/* Sidebar */}
+          <Sidebar />
+
+          {/* Content */}
+          <main className="flex-1 overflow-auto transition-all duration-300">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </SidebarProvider>
   );

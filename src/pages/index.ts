@@ -1,3 +1,3 @@
-export { default as Home } from "./private/dashboard/Home";
-export { default as Users } from "./private/Users";
-export { default as Settings } from "./private/Settings";
+export { default as Home } from "./private/dashboard/home";
+export { default as Users } from "./private/users/users";
+export { default as Settings } from "./private/settings";

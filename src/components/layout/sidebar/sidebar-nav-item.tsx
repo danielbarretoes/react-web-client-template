@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "./use-sidebar";
+import { useSidebar } from "./sidebar-context";
 
 interface SidebarNavItemProps {
   path: string;
@@ -10,12 +10,18 @@ interface SidebarNavItemProps {
 }
 
 function SidebarNavItem({ path, label, icon: Icon }: SidebarNavItemProps) {
-  const { isCollapsed } = useSidebar();
+  const { isCollapsed, closeMobileSidebar } = useSidebar();
+
+  const handleClick = () => {
+    // Cerrar el sidebar móvil cuando se hace clic en un enlace
+    closeMobileSidebar();
+  };
 
   return (
     <NavLink
       to={path}
       end={path === "/"}
+      onClick={handleClick}
       className={({ isActive }) =>
         cn(
           "flex items-center rounded-3xl text-sm font-medium transition-all duration-300 ease-in-out group",
@@ -25,17 +31,17 @@ function SidebarNavItem({ path, label, icon: Icon }: SidebarNavItemProps) {
             : "text-muted-foreground [&_svg]:text-muted-foreground",
           isCollapsed
             ? "justify-center size-10 p-0 gap-0 mx-auto"
-            : "justify-start h-10 px-3 py-2 gap-3 w-full"
+            : "justify-start h-10 px-3 py-2 gap-3 w-full min-w-0"
         )
       }
     >
       <Icon className="size-6 shrink-0 transition-all duration-300" />
       <span
         className={cn(
-          "transition-all duration-300 ease-in-out whitespace-nowrap font-medium",
+          "transition-all duration-300 ease-in-out whitespace-nowrap font-medium min-w-0",
           isCollapsed
             ? "max-w-0 opacity-0 overflow-hidden gap-0"
-            : "max-w-[200px] opacity-100"
+            : "max-w-[200px] opacity-100 overflow-hidden text-ellipsis"
         )}
       >
         {label}

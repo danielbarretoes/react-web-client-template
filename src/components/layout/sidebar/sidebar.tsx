@@ -1,68 +1,68 @@
-import { PanelLeft } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useSidebar } from "./use-sidebar";
+import { useSidebar } from "./sidebar-context";
 import { navGroups } from "@/components/router";
 import SidebarNavGroup from "./sidebar-nav-group";
-import CollapsibleButton from "@/components/layout/ui/collapsible-button";
-import GlassBackground from "../utils/glass-background";
+import Section from "../section/section";
+import SectionToolbar from "../section/section-toolbar";
+import SectionBody from "../section/section-body";
+import SidebarToolbar from "./sidebar-toolbar";
+import { cn } from "@/lib/utils";
 
 const SIDEBAR_WIDTH = 320; // 16 * 20 = 320px (w-64)
-const COLLAPSED_WIDTH = 96; // Aumentado para evitar que se corte el fondo circular
+const COLLAPSED_WIDTH = 72; // Aumentado para evitar que se corte el fondo circular
 
 function Sidebar() {
-  const { isCollapsed, toggleSidebar } = useSidebar();
+  const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
   return (
-    <aside
-      className="flex flex-col h-full transition-all duration-300 ease-in-out shrink-0"
-      style={{
-        width: isCollapsed ? `${COLLAPSED_WIDTH}px` : `${SIDEBAR_WIDTH}px`,
-        padding: "12px",
-      }}
-    >
-      <div className="flex flex-col h-full border border-border rounded-3xl shadow-md overflow-hidden">
-        <GlassBackground className="flex flex-col h-full rounded-3xl">
-          {/* Header with toggle button */}
-          <div
-            className={cn(
-              "flex h-14 items-center border-b border-border/50 transition-all duration-300",
-              isCollapsed ? "justify-center px-0" : "justify-between"
-            )}
-          >
-            {!isCollapsed && (
-              <h2 className="text-sm font-semibold transition-all duration-300 ease-in-out whitespace-nowrap pl-6 pr-4">
-                Template
-              </h2>
-            )}
-            <div className={cn(isCollapsed ? "mx-auto" : "px-4")}>
-              <CollapsibleButton
-                icon={PanelLeft}
-                collapsed={isCollapsed}
-                onClick={toggleSidebar}
-                size="icon"
-                variant="ghost"
-                className="bg-transparent border-none"
-              />
-            </div>
-          </div>
+    <>
+      {/* Backdrop para móvil */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 md:hidden transition-opacity duration-300"
+          onClick={closeMobileSidebar}
+          aria-hidden="true"
+        />
+      )}
 
-          {/* Navigation */}
-          <nav
+      <aside
+        className={cn(
+          "flex flex-col h-full transition-all duration-300 ease-in-out shrink-0 overflow-hidden overflow-x-hidden",
+          // En móvil: fixed overlay
+          "md:relative fixed top-0 left-0 z-50 md:z-auto",
+          // Animación de entrada/salida en móvil
+          isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        )}
+        style={{
+          width: isCollapsed ? `${COLLAPSED_WIDTH}px` : `${SIDEBAR_WIDTH}px`,
+        }}
+      >
+        <Section className="md:bg-transparent bg-background/95 backdrop-blur-xl">
+          <SectionToolbar
+            title={isCollapsed ? undefined : "Template"}
+            className={cn(isCollapsed ? "px-2" : "px-4")}
+          >
+            <SidebarToolbar />
+          </SectionToolbar>
+          <SectionBody
             className={cn(
-              "flex-1 space-y-4 py-4 transition-all duration-300 overflow-y-auto",
+              "space-y-4 py-4 transition-all duration-300 overflow-hidden overflow-x-hidden",
               isCollapsed ? "px-2" : "px-4"
             )}
           >
-            {navGroups.map((group, index) => (
-              <SidebarNavGroup
-                key={group.title || `group-${index}`}
-                group={group}
-              />
-            ))}
-          </nav>
-        </GlassBackground>
-      </div>
-    </aside>
+            <nav className="min-w-0 overflow-hidden overflow-x-hidden">
+              <div className="space-y-1">
+                {navGroups.map((group, index) => (
+                  <SidebarNavGroup
+                    key={group.title || `group-${index}`}
+                    group={group}
+                  />
+                ))}
+              </div>
+            </nav>
+          </SectionBody>
+        </Section>
+      </aside>
+    </>
   );
 }
 
